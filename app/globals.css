@@ -1,0 +1,147 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  /* Typography */
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+  /* Colors - Warm Sunset/Citrus Palette */
+  --color-background: #FFFDF1; /* Light Cream */
+  --color-surface: #FFFFFF;
+  --color-border: #F4EBD0; /* Subtle warm cream border */
+  --color-primary: #FF9644; /* Brand Orange */
+  --color-secondary: #FFCE99; /* Supporting Peach */
+  --color-text-primary: #2D1B00; /* Dark Earthy Brown */
+  --color-text-secondary: #6E5A44; /* Warm Earthy Gray */
+  --color-destructive: #EF4444;
+  --color-success: #10B981;
+
+  /* Radii */
+  --border-radius-sm: 4px;
+  --border-radius-md: 6px;
+  --border-radius-lg: 8px;
+  --border-radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(15 23 42 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(15 23 42 / 0.1), 0 2px 4px -2px rgb(15 23 42 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(15 23 42 / 0.1), 0 4px 6px -4px rgb(15 23 42 / 0.1);
+}
+
+@layer base {
+  :root {
+    --background: var(--color-background);
+    --foreground: var(--color-text-primary);
+  }
+}
+
+@layer base {
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    @apply antialiased;
+    font-family: var(--font-sans);
+    overscroll-behavior: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  * {
+    @apply border-[var(--color-border)];
+  }
+}
+
+@layer utilities {
+  .btn-primary {
+    @apply bg-[var(--color-primary)] px-5 py-2.5 font-semibold shadow-sm hover:brightness-[1.03] active:brightness-95 active:shadow-inner transition-all duration-200 ease-out;
+    color: var(--color-text-primary);
+    border-radius: 8px;
+    letter-spacing: -0.01em;
+  }
+  
+  .btn-secondary {
+    @apply bg-white text-[var(--color-text-primary)] ring-1 ring-inset ring-[var(--color-border)] px-4 py-2 transition-all duration-200 ease-out font-medium hover:bg-[var(--color-secondary)]/5 hover:ring-[var(--color-secondary)];
+    border-radius: 8px;
+    letter-spacing: -0.01em;
+  }
+
+  .btn-destructive {
+    @apply bg-[var(--color-destructive)] px-5 py-2.5 font-medium shadow-sm hover:brightness-[1.05] active:brightness-95 active:shadow-inner transition-all duration-200 ease-out;
+    color: #ffffff;
+    border-radius: 8px;
+  }
+
+  .card {
+    @apply bg-white shadow-[0_4px_20px_rgba(45,27,0,0.03)] ring-1 ring-[var(--color-text-primary)]/5 p-6;
+    border-radius: 16px;
+  }
+  
+  .input {
+    @apply bg-slate-50/50 border-none ring-1 ring-inset ring-[var(--color-border)] text-[var(--color-text-primary)] px-4 py-2.5 w-full transition-all duration-200 ease-out focus:outline-none focus:bg-white focus:ring-1 focus:ring-[var(--color-primary)] hover:ring-[var(--color-secondary)];
+    border-radius: 8px;
+  }
+
+  select.input {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236E5A44' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1.25rem;
+    padding-right: 2.5rem;
+  }
+
+  .label {
+    @apply block text-[var(--color-text-secondary)] text-sm mb-1.5 font-medium tracking-tight opacity-90;
+  }
+
+  /* .glass removed — glassmorphism is an anti-pattern for this design system (Vercel/Notion reference uses flat surfaces) */
+
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .range-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 6px;
+    border-radius: 999px;
+    background: var(--color-primary);
+    outline: none;
+    cursor: pointer;
+    border: none;
+    box-shadow: none;
+    transition: none;
+  }
+
+  .range-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    border: 3px solid white;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .range-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.2);
+  }
+
+  .range-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    border: 3px solid white;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+  }
+}
