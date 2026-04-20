@@ -6,21 +6,21 @@ import Link from "next/link";
 import { Loader2, Wand2 } from "lucide-react";
 import { useSettingsStore } from "@/store/useSettingsStore";
 import { getTranslations } from "@/lib/i18n";
+import { useToast } from "@/contexts/ToastContext";
 
 export default function RegisterPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { locale } = useSettingsStore();
   const t = getTranslations(locale).auth;
+  const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
 
     try {
       const res = await fetch("/api/register", {
@@ -31,9 +31,10 @@ export default function RegisterPage() {
 
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to register");
+      toast.success("Account created successfully. Please login.");
       router.push("/login");
     } catch (err: any) {
-      setError(err.message);
+      toast.error(err.message);
     } finally {
       setLoading(false);
     }
@@ -55,11 +56,6 @@ export default function RegisterPage() {
         </div>
 
         <div className="bg-white border border-[var(--color-border)] rounded-2xl p-6 sm:p-8 shadow-sm shadow-black/5">
-          {error && (
-            <div className="bg-red-50 text-red-600 border border-red-100 p-3 mb-5 rounded-xl text-[13px] font-medium text-center">
-              {error}
-            </div>
-          )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useSettingsStore } from "@/store/useSettingsStore";
 import { PROVIDER_MODELS, PROVIDER_LABELS } from "@/lib/models";
 import { getTranslations } from "@/lib/i18n";
+import { useToast } from "@/contexts/ToastContext";
 import {
   Copy,
   Download,
@@ -95,6 +96,8 @@ export default function GeneratePage() {
   const router = useRouter();
   const { provider, apiKey, selectedModel, locale, outputLanguage } = useSettingsStore();
   const t = getTranslations(locale).generate;
+  const { toast } = useToast();
+  
   const [loading, setLoading] = useState(false);
   const [showTemplates, setShowTemplates] = useState(false);
   const [variations, setVariations] = useState(1);
@@ -109,12 +112,6 @@ export default function GeneratePage() {
     tone: "Informative",
   });
   const [outputs, setOutputs] = useState<any[]>([]);
-  const [toast, setToast] = useState<{ msg: string; type: "error" | "success" } | null>(null);
-
-  const showToast = (msg: string, type: "error" | "success") => {
-    setToast({ msg, type });
-    setTimeout(() => setToast(null), 3000);
-  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -123,13 +120,13 @@ export default function GeneratePage() {
   const applyTemplate = (template: (typeof TEMPLATES)[number]) => {
     setFormData(template.data);
     setShowTemplates(false);
-    showToast(`Template "${template.name}" applied!`, "success");
+    toast.success(`Template "${template.name}" applied!`);
   };
 
   const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!apiKey) {
-      showToast(t.toastApiKey, "error");
+      toast.error(t.toastApiKey);
       setTimeout(() => router.push("/settings"), 2000);
       return;
     }
@@ -160,14 +157,13 @@ export default function GeneratePage() {
       // Handle both array and single responses
       const results: any[] = data.results || [data.result];
       setOutputs(results);
-      showToast(
+      toast.success(
         results.length > 1
           ? `${results.length} variations generated successfully!`
-          : "Content generated successfully!",
-        "success"
+          : "Content generated successfully!"
       );
     } catch (err: any) {
-      showToast(err.message || "An error occurred", "error");
+      toast.error(err.message || "An error occurred");
     } finally {
       setLoading(false);
     }
@@ -201,7 +197,7 @@ export default function GeneratePage() {
     const formatted = formatTxtOutput(currentOutput);
     if (!formatted) return;
     navigator.clipboard.writeText(formatted);
-    showToast(`Variation ${activeTab + 1} copied to clipboard`, "success");
+    toast.success(`Variation ${activeTab + 1} copied to clipboard`);
   };
 
   const handleDownload = () => {
@@ -227,17 +223,6 @@ export default function GeneratePage() {
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 pb-16 px-1 md:px-0 max-w-7xl mx-auto">
-      {toast && (
-        <div
-          className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-4 bg-[#1A1A1A] text-white pl-4 pr-3 py-2.5 rounded-full shadow-xl border border-white/10 text-[13px] font-medium animate-in slide-in-from-bottom-4 duration-300 ${
-            toast.type === "success"
-              ? "bg-[#1A1A1A]"
-              : "bg-red-950 border-red-900"
-          }`}
-        >
-          {toast.msg}
-        </div>
-      )}
 
       {/* ── Header ── */}
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">

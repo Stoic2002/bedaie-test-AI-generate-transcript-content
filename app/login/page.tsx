@@ -7,20 +7,20 @@ import Link from "next/link";
 import { Loader2, Wand2 } from "lucide-react";
 import { useSettingsStore } from "@/store/useSettingsStore";
 import { getTranslations } from "@/lib/i18n";
+import { useToast } from "@/contexts/ToastContext";
 
 export default function LoginPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { locale } = useSettingsStore();
   const t = getTranslations(locale).auth;
+  const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
 
     const res = await signIn("credentials", {
       email,
@@ -29,7 +29,7 @@ export default function LoginPage() {
     });
 
     if (res?.error) {
-      setError(res.error);
+      toast.error(res.error);
       setLoading(false);
     } else {
       router.push("/");
@@ -53,11 +53,6 @@ export default function LoginPage() {
         </div>
 
         <div className="bg-white border border-[var(--color-border)] rounded-2xl p-6 sm:p-8 shadow-sm shadow-black/5">
-          {error && (
-            <div className="bg-red-50 text-red-600 border border-red-100 p-3 mb-5 rounded-xl text-[13px] font-medium text-center">
-              {error}
-            </div>
-          )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>

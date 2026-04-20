@@ -75,6 +75,10 @@ type Translations = {
     scenes: string;
     deleted: string;
     undo: string;
+    next: string;
+    previous: string;
+    page: string;
+    of: string;
   };
   settings: {
     title: string;
@@ -177,6 +181,10 @@ export const translations: Record<Locale, Translations> = {
       scenes: "Scenes",
       deleted: "Deleted",
       undo: "Undo",
+      next: "Next",
+      previous: "Previous",
+      page: "Page",
+      of: "of",
     },
     settings: {
       title: "Settings",
@@ -278,6 +286,10 @@ export const translations: Record<Locale, Translations> = {
       scenes: "Adegan",
       deleted: "Dihapus",
       undo: "Batalkan",
+      next: "Berikutnya",
+      previous: "Sebelumnya",
+      page: "Halaman",
+      of: "dari",
     },
     settings: {
       title: "Pengaturan",
@@ -379,6 +391,10 @@ export const translations: Record<Locale, Translations> = {
       scenes: "Adegan",
       deleted: "Dipadam",
       undo: "Buat Asal",
+      next: "Seterusnya",
+      previous: "Sebelumnya",
+      page: "Halaman",
+      of: "daripada",
     },
     settings: {
       title: "Tetapan",
